@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ category.title }} :: {{ block.super }}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+<h1>{{ category }}</h1>
+{% for item in news %}
+<div class="card mb-3">
+    <div class="card-header">
+        {{ forloop.counter }}
+        Категория: <a href="{{ item.category.get_absolute_url }}">{{ item.category }}</a>
+    </div>
+    <div class="card-body">
+        <div class="media">
+            {% if item.photo %}
+            <img src="{{ item.photo.url }}" alt="" width="350" class="mr-3">
+            {% else %}
+            <img src="https://www.fillmurray.com/640/360" alt="" width="350" class="mr-3">
+            {% endif %}
+            <div class="media-body">
+                <h5 class="card-title {% cycle 'text-danger' 'text-success' %}">{{ item.title }}</h5>
+                <p class="card-text">{{ item.content | truncatechars:250 }}</p>
+                <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Read more...</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted">
+        {{ item.date_at | date:"d.m.Y H:i:s" }}
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
